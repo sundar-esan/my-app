@@ -1,7 +1,10 @@
 import "./App.css";
+import React, { useState } from "react";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 export default function App() {
-  const movies = [
+  const initialmovielist = [
     {
       name: "Irudhi Suttru",
       poster:
@@ -42,9 +45,34 @@ export default function App() {
       rating: "7.2"
     }
   ];
+  const[movielist,setMovieList]=useState(initialmovielist);
+  const [name,setName]=useState(" ");
+  const [poster,setPoster]=useState(" ");
+  const [rating,setRating]=useState(" ");
+  const [summary,setSummary]=useState(" ");
   return (
     <div className="App">
-      {movies.map((ele) => (
+      <div className="add-movie-form"> 
+
+     <TextField onChange={(event) => setName(event.target.value)}  label="ENTER MOVIE NAME" variant="filled" color="success" focused />
+    
+     <TextField onChange={(event) =>setPoster(event.target.value)} label="Poster" variant="filled" color="success" focused />
+     
+      <TextField onChange={(event) =>setRating(event.target.value)} label="Rating" variant="filled" color="success" focused />
+  
+      <TextField onChange={(event) =>setSummary(event.target.value)} label="Summary" color="secondary" focused />
+
+      <Button  onClick={()=>{
+        const newMovie={
+          name:name,
+          poster:poster,
+          rating:rating,
+          summary:summary,
+        };
+        setMovieList([...movielist,newMovie]);
+      }} variant="outlined">Add Movie</Button>
+      </div>
+      {movielist.map((ele) => (
         <Move
           name={ele.name}
           poster={ele.poster}
@@ -56,6 +84,7 @@ export default function App() {
   );
 }
 function Move({ name, poster, summary, rating }) {
+  
   return (
     <div>
       <h1>MY FAVOURITE MOVIE </h1>
@@ -66,7 +95,14 @@ function Move({ name, poster, summary, rating }) {
         <b>Summary:</b>
         {summary}
       </p>
+      
+      <Button  onClick={summary} style={{display:summary ? 'block':'none' }}
+        
+        
+           classNmae="summary" variant="outlined">Summary</Button>
       <h3>Rating:{rating}/10</h3>
+  
     </div>
   );
 }
+

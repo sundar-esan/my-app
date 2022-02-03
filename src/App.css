@@ -7,3 +7,9 @@
   width: 250px;
   object-fit: cover;
 }
+.add-movie-form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin:16px;
+}
