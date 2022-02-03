@@ -2,6 +2,15 @@ import "./App.css";
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
+
+
 
 export default function App() {
   const initialmovielist = [
@@ -15,7 +24,7 @@ export default function App() {
     },
     {
       name: "Ghilli",
-      poster: "https://moviesonlinehot.files.wordpress.com/2018/03/ghilli.jpg",
+      poster: "https://pbs.twimg.com/media/EVyhuIsU4AANZ1B.jpg",
       summary:
         "Velu, an aspiring Kabaddi player, is in Madurai to participate in one of the regional matches when he rescues Dhanalakshmi from Muthupandi, a powerful man keen on marrying the girl against her wishes.",
       rating: "8"
@@ -54,14 +63,14 @@ export default function App() {
     <div className="App">
       <div className="add-movie-form"> 
 
-     <TextField onChange={(event) => setName(event.target.value)}  label="ENTER MOVIE NAME" variant="filled" color="success" focused />
+     <TextField onChange={(event) => setName(event.target.value)}  label="ENTER MOVIE NAME"  color="primary" focused />
     
-     <TextField onChange={(event) =>setPoster(event.target.value)} label="Poster" variant="filled" color="success" focused />
+     <TextField onChange={(event) =>setPoster(event.target.value)} label="Poster" color="primary" focused />
      
-      <TextField onChange={(event) =>setRating(event.target.value)} label="Rating" variant="filled" color="success" focused />
+      <TextField onChange={(event) =>setRating(event.target.value)} label="Rating"  color="primary" focused />
   
-      <TextField onChange={(event) =>setSummary(event.target.value)} label="Summary" color="secondary" focused />
-
+      <TextField onChange={(event) =>setSummary(event.target.value)} label="Summary" color="primary" focused />
+      
       <Button  onClick={()=>{
         const newMovie={
           name:name,
@@ -70,8 +79,10 @@ export default function App() {
           summary:summary,
         };
         setMovieList([...movielist,newMovie]);
-      }} variant="outlined">Add Movie</Button>
-      </div>
+      }} variant="contained">Add Movie</Button>
+
+      </div >
+      <div className="movie-list">
       {movielist.map((ele) => (
         <Move
           name={ele.name}
@@ -80,29 +91,68 @@ export default function App() {
           rating={ele.rating}
         />
       ))}
+      </div>
     </div>
   );
 }
 function Move({ name, poster, summary, rating }) {
   
+const [show,setShow]= useState(true);
+
+//conditional styling
+ // const summaryStyles={display: show ? "block" : "none", };
+  
   return (
-    <div>
-      <h1>MY FAVOURITE MOVIE </h1>
-      <h2>{name} </h2>
+    <Card className="movie-card">
+      
       <img className="pro-pic" src={poster} alt="Movie-Poster" />
 
-      <p>
+    <CardContent>
+      <h2 className="movie-name">{name} </h2>
+
+      <div className="movie-spec">
+
+      <h3>Rating:{rating}/10</h3>
+      <IconButton onClick={()=>setShow(!show)} color="primary" aria-label="Toogle description">
+  {show ? <ExpandLessIcon/>:<ExpandMoreIcon/>}
+</IconButton>
+      
+      <Counter/>
+      </div>
+      
+      {/*using conditional rndering to hide the summary*/}
+     {show ? <p  className="movie-summary">
         <b>Summary:</b>
         {summary}
-      </p>
-      
-      <Button  onClick={summary} style={{display:summary ? 'block':'none' }}
-        
-        
-           classNmae="summary" variant="outlined">Summary</Button>
-      <h3>Rating:{rating}/10</h3>
-  
-    </div>
+      </p> :""}
+      </CardContent>
+    </Card>
   );
+}
+
+function Counter(){
+  const[like,setLike]=useState(0);
+  const[dislike,setDisLike]=useState(0);
+
+  return(
+    <div className="counter-conatiner">
+  <IconButton className="like-dislike"
+      onClick={()=>setLike(like+1)} aria-label="like button" color="primary">
+     <Badge badgeContent={like} color="primary">
+         👍
+       </Badge>
+</IconButton>
+
+
+<IconButton className="like-dislike"
+      onClick={()=>setDisLike(dislike+1)} aria-label="dislike button" color="error">
+      <Badge badgeContent={dislike} color="error">
+      👎
+       </Badge>
+</IconButton>
+      
+   
+    </div>
+  )
 }
 

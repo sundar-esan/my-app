@@ -4,7 +4,7 @@
 }
 .pro-pic {
   height: 400px;
-  width: 250px;
+  width: 300px;
   object-fit: cover;
 }
 .add-movie-form{
@@ -12,4 +12,26 @@
   flex-direction:column;
   gap:10px;
   margin:16px;
+}
+.movie-spec{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.movie-card{
+  width: 300px;
+  height:min-content;
+}
+.movie-list{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:space-around;
+
+}
+.movie-name{
+  margin-top: 0px;
+}
+.movie-summary{
+  margin-top: 0px;
 }
