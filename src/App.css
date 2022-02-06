@@ -1,7 +1,8 @@
 .App {
   font-family: sans-serif;
-  text-align: center;
+  
 }
+/* add movie list & fav movie list stylings starts here */
 .pro-pic {
   height: 400px;
   width: 300px;
@@ -34,4 +35,26 @@
 }
 .movie-summary{
   margin-top: 0px;
+}
+
+/*tic tac toe styling starts here*/
+.gamebox{
+  height: 150px;
+  width:150px;
+  border:2px solid black;
+  font-size: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.board{
+  display:flex;
+  flex-wrap: wrap;
+  width:492px;
+}
+.fullgame{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

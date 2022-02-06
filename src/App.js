@@ -8,6 +8,9 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import {Switch,Route,Link} from "react-router-dom";
+
+
 
 
 
@@ -61,7 +64,60 @@ export default function App() {
   const [summary,setSummary]=useState(" ");
   return (
     <div className="App">
-      <div className="add-movie-form"> 
+      <ul>
+        <li>
+          <Link to ="/movies">Movies</Link>
+        </li>
+        <li>
+          <Link to ="/color-game">Color game</Link>
+        </li>
+        <li>
+          <Link to ="/tic-tac-toe">Tic-Tac-Toe</Link>
+        </li>
+        <li>
+          <Link to ="/">Home</Link>
+        </li>
+      </ul>
+      <Switch>
+        <Route path="/movies"> <div className="add-movie-form"> 
+
+<TextField onChange={(event) => setName(event.target.value)}  label="ENTER MOVIE NAME"  color="primary" focused />
+
+<TextField onChange={(event) =>setPoster(event.target.value)} label="Poster" color="primary" focused />
+
+ <TextField onChange={(event) =>setRating(event.target.value)} label="Rating"  color="primary" focused />
+
+ <TextField onChange={(event) =>setSummary(event.target.value)} label="Summary" color="primary" focused />
+ 
+ <Button  onClick={()=>{
+   const newMovie={
+     name:name,
+     poster:poster,
+     rating:rating,
+     summary:summary,
+   };
+   setMovieList([...movielist,newMovie]);
+ }} variant="contained">Add Movie</Button>
+
+ </div >
+ <div className="movie-list">
+ {movielist.map((ele) => (
+   <Move
+     name={ele.name}
+     poster={ele.poster}
+     summary={ele.summary}
+     rating={ele.rating}
+   />
+ ))}
+ </div></Route>
+        <Route path="/color-game">welcome to color game,still not build this game ,will be upload soon</Route>
+        <Route path="/tic-tac-toe">
+        <TicTacToe/>
+       
+        </Route>
+        <Route path="/">welcome to Home page</Route>
+      </Switch>
+     {/* <div className="add-movie-form"> 
 
      <TextField onChange={(event) => setName(event.target.value)}  label="ENTER MOVIE NAME"  color="primary" focused />
     
@@ -91,7 +147,7 @@ export default function App() {
           rating={ele.rating}
         />
       ))}
-      </div>
+      </div>*/}
     </div>
   );
 }
@@ -156,3 +212,60 @@ function Counter(){
   )
 }
 
+//Tic -Tac -Toe game code starts here
+  function TicTacToe(){
+
+    const [board,setBoard]=useState([null,null,null,null,null,null,null,null,null]);
+   const decideWinner=(board)=>{
+     const lines=[
+       [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],
+       [2,5,8],[0,4,8],[2,4,6]
+     ];
+     for(let i=0;i<lines.length;i++){
+       const [a,b,c]=lines[i];
+       if (board[a]!== null && board[a]===board[b] && board[b]===board[c]){
+         console.log("winner is" ,board[a]);
+        return board[a];
+      }
+       }
+       return null;
+      };
+        
+        const winner= decideWinner(board);
+
+    const [isXturn,setIsXTurn]=useState(true);
+    const handleClick =(index)=>{
+      if(winner===null && board[index]===null){
+      const boardCopy = [...board];
+     console.log(boardCopy,index);
+     boardCopy[index]= isXturn ? "x" : "o";
+     setBoard(boardCopy);
+     setIsXTurn(!isXturn);
+    };}
+    return(
+      <div className="fullgame">
+      <div className="board">
+        {board.map((val,index)=>(
+        <GameBox val={val} onPlayerClick={()=>handleClick(index)} />
+        ))}
+      
+      </div>
+      {winner? <h2>Winner is:{winner}</h2> :""}
+      </div>
+    );
+  
+  }
+  function GameBox({val,onPlayerClick}){
+    //const val="x"
+    const styles={
+      color:val==="x" ? "green" : "red",
+    };
+    return(
+      <div 
+      onClick={()=>onPlayerClick()}
+      style={styles}
+       className="gamebox">
+         {val}   
+      </div>
+    );
+  }
