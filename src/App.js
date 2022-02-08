@@ -9,7 +9,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import {Switch,Route,Link} from "react-router-dom";
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import InfoIcon from '@mui/icons-material/Info';
+import {useHistory} from "react-router-dom";
 
 
 
@@ -79,6 +81,9 @@ export default function App() {
         </li>
       </ul>
       <Switch>
+      <Route path="/movies/:id">
+          <MovieDetails/>
+         </Route>
         <Route path="/movies"> <div className="add-movie-form"> 
 
 <TextField onChange={(event) => setName(event.target.value)}  label="ENTER MOVIE NAME"  color="primary" focused />
@@ -101,21 +106,38 @@ export default function App() {
 
  </div >
  <div className="movie-list">
- {movielist.map((ele) => (
+ {movielist.map((ele,index) => (
    <Move
+     key={index}
      name={ele.name}
      poster={ele.poster}
      summary={ele.summary}
      rating={ele.rating}
+      deleteButton ={
+      <IconButton
+        onClick={()=>{
+        console.log(index);
+         const copyMovieList =[...movielist];
+         copyMovieList.splice(index,1);
+         setMovieList(copyMovieList);
+      }}
+      aria-Label="delete"
+      color="error"
+      ><DeleteIcon/>
+        Delete </IconButton>}
+        id={index}
    />
+      
  ))}
  </div></Route>
+        
         <Route path="/color-game">welcome to color game,still not build this game ,will be upload soon</Route>
         <Route path="/tic-tac-toe">
         <TicTacToe/>
        
         </Route>
-        <Route path="/">welcome to Home page</Route>
+        <Route exact path="/">welcome to Home page</Route>
+        <Route path="**"><NotFound/></Route>
       </Switch>
      {/* <div className="add-movie-form"> 
 
@@ -151,9 +173,22 @@ export default function App() {
     </div>
   );
 }
-function Move({ name, poster, summary, rating }) {
+//functin for notfound 
+function NotFound(){
+  return(
+    <div>
+      <h1 className="notfound">404 Not Found</h1>
+      <img
+       width="100%"
+        src="https://cdn.dribbble.com/users/2298887/screenshots/5717807/caveman.gif"
+      alt="404 Not Found" />
+    </div>
+  )
+}
+function Move({ name, poster, summary, rating ,deleteButton,id }) {
   
 const [show,setShow]= useState(true);
+const history = useHistory();
 
 //conditional styling
  // const summaryStyles={display: show ? "block" : "none", };
@@ -172,9 +207,17 @@ const [show,setShow]= useState(true);
       <IconButton onClick={()=>setShow(!show)} color="primary" aria-label="Toogle description">
   {show ? <ExpandLessIcon/>:<ExpandMoreIcon/>}
 </IconButton>
+
       
       <Counter/>
       </div>
+    {deleteButton}
+    <IconButton
+ onClick={()=>history.push(`/movies/${id}`)}
+  color="primary"
+   aria-label="Toogle description">
+  <InfoIcon/>
+</IconButton>
       
       {/*using conditional rndering to hide the summary*/}
      {show ? <p  className="movie-summary">
@@ -216,7 +259,8 @@ function Counter(){
   function TicTacToe(){
 
     const [board,setBoard]=useState([null,null,null,null,null,null,null,null,null]);
-   const decideWinner=(board)=>{
+   //code for deciding  winner 
+    const decideWinner=(board)=>{
      const lines=[
        [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],
        [2,5,8],[0,4,8],[2,4,6]
@@ -226,12 +270,15 @@ function Counter(){
        if (board[a]!== null && board[a]===board[b] && board[b]===board[c]){
          console.log("winner is" ,board[a]);
         return board[a];
-      }
-       }
+    }
+     }
        return null;
       };
         
         const winner= decideWinner(board);
+        //code for darw
+
+       
 
     const [isXturn,setIsXTurn]=useState(true);
     const handleClick =(index)=>{
@@ -251,6 +298,9 @@ function Counter(){
       
       </div>
       {winner? <h2>Winner is:{winner}</h2> :""}
+      <button onClick={()=>{
+        setBoard([null,null,null,null,null,null,null,null,null]);
+        setIsXTurn(true);}}>Reset</button>   
       </div>
     );
   
@@ -268,4 +318,23 @@ function Counter(){
          {val}   
       </div>
     );
+  }
+
+  function MovieDetails(){
+    const movie={name: "Irudhi Suttru",
+    poster:
+      "https://static.toiimg.com/thumb/msid-61285285,width-219,height-317,imgsize-38918/61285285.jpg",
+    summary:
+      "A former boxer quits boxing following an argument with the authorities over underlying politics. He goes on to coach a fisherwoman so that he can fulfil his dreams through her.",
+    rating: "7.6"}
+    return(
+      
+      <div>
+        <iframe width="727" height="409" src="https://www.youtube.com/embed/SZsb3IovkK8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2 >Name:{movie.name}</h2>
+
+      <h3>Rating:{movie.rating}/10</h3>
+      <p>Summary:{movie.summary}</p>
+      </div>
+    )
   }
